@@ -1,0 +1,15 @@
+PROGRAM_PATH=$1
+INPUT_DIRECTORY_PATH=$2
+META_DIRECTORY_PATH=$3
+OUTPUT_DIRECTORY_PATH=$4
+OUTPUT_FILE_PATH=$5
+EXPECTEDOUTPUT_FILE_PATH=$6
+
+# calls the comparator compilation script
+sh build.sh
+
+# executes the promethee with given inputs and output paths
+/$PROGRAM_PATH $INPUT_DIRECTORY_PATH $META_DIRECTORY_PATH $OUTPUT_DIRECTORY_PATH
+
+# executes the comparator with given the expected output path
+./diff/comparator $EXPECTEDOUTPUT_FILE_PATH $OUTPUT_FILE_PATH
