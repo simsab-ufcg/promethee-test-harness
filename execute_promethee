@@ -9,7 +9,7 @@ EXPECTEDOUTPUT_FILE_PATH=$6
 sh build.sh
 
 # executes the promethee with given inputs and output paths
-/$PROGRAM_PATH $INPUT_DIRECTORY_PATH $META_DIRECTORY_PATH $OUTPUT_DIRECTORY_PATH
+./$PROGRAM_PATH $INPUT_DIRECTORY_PATH $META_DIRECTORY_PATH $OUTPUT_DIRECTORY_PATH
 
 # executes the comparator with given the expected output path
 ./diff/comparator $EXPECTEDOUTPUT_FILE_PATH $OUTPUT_FILE_PATH
