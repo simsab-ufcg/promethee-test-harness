@@ -1,0 +1,41 @@
+#!/bin/bash
+
+source environment.conf
+
+if [ ! -d $promethee_path ]; then
+	git clone $promethee_url -b $promethee_branch
+	git --git-dir=$promethee_path/.git checkout --detach $promethee_version
+fi
+
+make -C $promethee_path
+
+if [ ! -d $tiff_utils_path ]; then
+	git clone $tiff_utils_url
+	git --git-dir=$tiff_utils_path/.git checkout --detach $tiff_utils_version
+fi
+
+g++ -std=c++14 $utils_path/comparator.cpp -o $utils_path/comparator
+
+g++ -std=c++14 $tiff_utils_path/tifGenerator.cpp -o $tiff_utils_path/tifGenerator -ltiff
+./$tiff_utils_path/tifGenerator $test_size $test_name.tif -R
+
+cp $utils_path/tif-converter.py .
+
+python tif-converter.py
+rm tif-converter.py
+
+if [ ! -d $promethee_path/samples/harness ]; then
+	mkdir $promethee_path/samples/harness
+	mkdir $promethee_path/samples/harness/input
+	mkdir $promethee_path/samples/harness/meta
+	mkdir $promethee_path/samples/harness/output
+fi
+
+# those metadatas are going to be variables in environment.conf
+echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
+echo linear >> $promethee_path/samples/harness/meta/$test_name.meta
+echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
+echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
+
+mv $test_name.txt $promethee_path/samples/harness/input/$test_name.input
+mv $test_name.tif $promethee_path/$umbu_path
