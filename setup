@@ -33,9 +33,8 @@ fi
 
 # those metadatas are going to be variables in environment.conf
 echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
-echo linear >> $promethee_path/samples/harness/meta/$test_name.meta
+echo $function_type >> $promethee_path/samples/harness/meta/$test_name.meta
 echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
-echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
+echo $is_max >> $promethee_path/samples/harness/meta/$test_name.meta
 
 mv $test_name.txt $promethee_path/samples/harness/input/$test_name.input
-mv $test_name.tif $promethee_path/$umbu_path

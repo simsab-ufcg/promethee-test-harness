@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
 	string line1, line2, token1, token2;
 	double value1, value2, factor, difference;
 
+	factor = atof(argv[3]);
 	actualLine = actualColumn = 0;
 
 	while( getline(file1, line1) ) {
@@ -51,7 +52,7 @@ int main(int argc, char* argv[]) {
 				if(token1 == "nan" or token2 == "nan") notNanCellError(actualLine, actualColumn);
 				else {
 					value1 = atof(token1.c_str());
-					value1 /= factor;
+					value1 /= (factor * factor) - 1;
 
 					value2 = atof(token2.c_str());
 					

@@ -1,3 +1,22 @@
 #!/bin/bash
 
-# TODO
+source environment.conf
+
+./$promethee_path/run $promethee_path/samples/harness/input/ $promethee_path/samples/harness/meta/ $promethee_path/samples/harness/output/
+
+# depending on function_type, we can have more parameters
+./$promethee_path/run -um random.tif 1 -type=$function_type -chunk=$chunk_size -ismax 1
+
+rm -rf testharness
+mkdir testharness
+
+rm nxt.$test_name.tif
+
+python $utils_path/tif-converter.py
+rm out.$test_name.tif
+rm $test_name.txt
+
+mv out.$test_name.txt testharness/
+mv $promethee_path/samples/harness/output/netflow.txt testharness/
+
+./$utils_path/comparator testharness/out.$test_name.txt testharness/netflow.txt $test_size
