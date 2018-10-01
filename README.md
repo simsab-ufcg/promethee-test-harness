@@ -6,6 +6,8 @@ A bash script that runs promethee umbu-caja version and compares the output with
 To run tests in your machine, you should use the following commands:
 
 ```
-./setup (this one can also be used to generate a new random test)
+./setup
 ./run
 ```
+
+'setup' command can also be used to generate a new random test.

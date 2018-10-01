@@ -14,15 +14,10 @@ if [ ! -d $tiff_utils_path ]; then
 	git --git-dir=$tiff_utils_path/.git checkout --detach $tiff_utils_version
 fi
 
-g++ -std=c++14 $utils_path/comparator.cpp -o $utils_path/comparator
-
-g++ -std=c++14 $tiff_utils_path/tifGenerator.cpp -o $tiff_utils_path/tifGenerator -ltiff
+make
 ./$tiff_utils_path/tifGenerator $test_size $test_name.tif -R
 
-cp $utils_path/tif-converter.py .
-
-python tif-converter.py
-rm tif-converter.py
+python $utils_path/tif-converter.py $test_name.tif
 
 if [ ! -d $promethee_path/samples/harness ]; then
 	mkdir $promethee_path/samples/harness
@@ -32,9 +27,9 @@ if [ ! -d $promethee_path/samples/harness ]; then
 fi
 
 # those metadatas are going to be variables in environment.conf
-echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
+echo $criterion_weight >> $promethee_path/samples/harness/meta/$test_name.meta
 echo $function_type >> $promethee_path/samples/harness/meta/$test_name.meta
-echo 1 >> $promethee_path/samples/harness/meta/$test_name.meta
+echo $p_parameter >> $promethee_path/samples/harness/meta/$test_name.meta
 echo $is_max >> $promethee_path/samples/harness/meta/$test_name.meta
 
 mv $test_name.txt $promethee_path/samples/harness/input/$test_name.input

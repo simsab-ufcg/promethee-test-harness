@@ -10,11 +10,10 @@ source environment.conf
 rm -rf testharness
 mkdir testharness
 
-rm nxt.$test_name.tif
+python $utils_path/tif-converter.py out.$test_name.tif
 
-python $utils_path/tif-converter.py
+rm nxt.$test_name.tif
 rm out.$test_name.tif
-rm $test_name.txt
 
 mv out.$test_name.txt testharness/
 mv $promethee_path/samples/harness/output/netflow.txt testharness/

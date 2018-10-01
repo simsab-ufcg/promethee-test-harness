@@ -3,3 +3,4 @@ comparator
 testharness/
 Promethee2/
 TiffUtils/
+*.tif
