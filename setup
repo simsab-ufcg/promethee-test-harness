@@ -15,7 +15,7 @@ if [ ! -d $tiff_utils_path ]; then
 	git --git-dir=$tiff_utils_path/.git checkout --detach $tiff_utils_version
 fi
 
-echo "Generating new random test case..."
+echo "Generating new random test case with dimensions $test_size x $test_size"
 make
 ./$tiff_utils_path/tifGenerator $test_size $test_name.tif -R
 

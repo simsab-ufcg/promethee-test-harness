@@ -2,14 +2,30 @@
 
 source environment.conf
 
+opt_start=`date +%s`
 ./$promethee_path/run $promethee_path/samples/harness/input/ $promethee_path/samples/harness/meta/ $promethee_path/samples/harness/output/
+opt_end=`date +%s`
 
+let opt_exec_time=$opt_end-$opt_start
+echo "Execution time of opt version: $opt_exec_time seconds"
+
+flag_max=
+
+if [ $is_max -eq 1 ]; then
+	flag_max=-ismax
+fi
+
+umbu_start=`date +%s`
 # depending on function_type, we can have more parameters
 if [ $function_type = linear ]; then
-	./$promethee_path/run -um random.tif $criterion_weight -type=$function_type -chunk=$chunk_size -ismax $p_parameter
+	./$promethee_path/run -um random.tif $criterion_weight -type=$function_type -chunk=$chunk_size $flag_max $p_parameter
 else
-	./$promethee_path/run -um random.tif $criterion_weight -type=$function_type -chunk=$chunk_size -ismax $p_parameter $q_parameter
+	./$promethee_path/run -um random.tif $criterion_weight -type=$function_type -chunk=$chunk_size $flag_max $p_parameter $q_parameter
 fi
+umbu_end=`date +%s`
+
+let umbu_exec_time=$umbu_end-$umbu_start
+echo "Execution time of umbu version: $umbu_exec_time seconds"
 
 if [ -d testharness ]; then
 	rm -rf testharness
@@ -25,4 +41,4 @@ rm out.$test_name.tif
 mv out.$test_name.txt testharness/
 mv $promethee_path/samples/harness/output/netflow.txt testharness/
 
-./$utils_path/comparator testharness/out.$test_name.txt testharness/netflow.txt $test_size
+./$utils_path/comparator testharness/out.$test_name.txt testharness/netflow.txt
