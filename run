@@ -5,9 +5,16 @@ source environment.conf
 ./$promethee_path/run $promethee_path/samples/harness/input/ $promethee_path/samples/harness/meta/ $promethee_path/samples/harness/output/
 
 # depending on function_type, we can have more parameters
-./$promethee_path/run -um random.tif 1 -type=$function_type -chunk=$chunk_size -ismax 1
+if [ $function_type = linear ]; then
+	./$promethee_path/run -um random.tif $criterion_weight -type=$function_type -chunk=$chunk_size -ismax $p_parameter
+else
+	./$promethee_path/run -um random.tif $criterion_weight -type=$function_type -chunk=$chunk_size -ismax $p_parameter $q_parameter
+fi
 
-rm -rf testharness
+if [ -d testharness ]; then
+	rm -rf testharness
+fi
+
 mkdir testharness
 
 python $utils_path/tif-converter.py out.$test_name.tif
