@@ -1,0 +1,44 @@
+#!/bin/bash
+
+source environment.conf
+
+if [ ! -d $promethee_path ]; then
+	git clone $promethee_url -b $promethee_branch
+	git --git-dir=$promethee_path/.git checkout --detach $promethee_version
+fi
+
+make -C $promethee_path
+rm -rf promethee/
+
+if [ ! -d $tiff_utils_path ]; then
+	git clone $tiff_utils_url
+	git --git-dir=$tiff_utils_path/.git checkout --detach $tiff_utils_version
+fi
+
+echo "Generating new random test case..."
+make
+./$tiff_utils_path/tifGenerator $test_size $test_name.tif -R
+
+python $utils_path/tif-converter.py $test_name.tif
+
+if [ -d $promethee_path/samples/harness ]; then
+	rm -rf $promethee_path/samples/harness
+fi
+
+mkdir $promethee_path/samples/harness
+mkdir $promethee_path/samples/harness/input
+mkdir $promethee_path/samples/harness/meta
+mkdir $promethee_path/samples/harness/output
+
+echo $criterion_weight >> $promethee_path/samples/harness/meta/$test_name.meta
+echo $function_type >> $promethee_path/samples/harness/meta/$test_name.meta
+
+if [ $function_type = linear ]; then
+	echo $p_parameter >> $promethee_path/samples/harness/meta/$test_name.meta
+else
+	echo $p_parameter $q_parameter >> $promethee_path/samples/harness/meta/$test_name.meta
+fi
+
+echo $is_max >> $promethee_path/samples/harness/meta/$test_name.meta
+
+mv $test_name.txt $promethee_path/samples/harness/input/$test_name.input

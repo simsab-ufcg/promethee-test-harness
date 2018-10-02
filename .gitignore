@@ -1,4 +1,7 @@
-bin/
+comparator
 *.o
-
-
+testharness/
+Promethee2/
+TiffUtils/
+*.tif
+promethee/
